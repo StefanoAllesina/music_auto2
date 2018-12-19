@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url:'/projects',
+                    method:'GET',
+                    success: function(data) {
+                        console.log(data);
+                        var html = '';
+                        for(var i in data) {
+                            html += `<a href="/edit/${data[i]}" class="list-group-item list-group-item-action">${data[i]}</a>`
+                        }
+                        document.getElementById("projects").innerHTML = html;
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <% include navbar %>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="list-group" id="projects">
+                
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <form enctype="multipart/form-data" method="POST" action="/upload">
+                        <input name="file" type="file">
+                        <input type="submit">
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>

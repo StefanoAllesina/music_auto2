@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        rect {
+            stroke: blue;
+            stroke-width: 5;
+            fill-opacity: 0;
+            stroke-opacity: 1;
+        }
+        circle {
+            cursor: pointer;
+        }
+    </style>
+    
+    <script src="lib/snap.svg-min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        function box(boxID, lineNum, x, y, w, h) {
+            this.boxID = boxID;
+            this.lineNum = lineNum;
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+        }
+        function page(pageNum, boxes) {
+            this.pageNum = pageNum;
+            this.boxes = boxes;
+        }
+        $(document).ready(function() {
+            $.ajax({
+                method: 'GET',
+                success: function(data) {
+                    
+                },
+                error: function(error) {
+                    console.log(error);
+                    window.alert(error);
+                },
+                url: '/projects'
+            });
+            var s = Snap("#something");
+            var rect = s.rect(475, 1043, 2545, 162);
+            var dragging = 0;
+            var handleGroup;
+            function addHandleFunc() {
+                if(dragging == 0) {
+                    dragging = 1;
+                    var bb = this.getBBox();
+                    var handle = new Array();
+                    handle[0] = s.circle(bb.x,bb.y,20).attr({class: 'handler'});
+                    handle[1] = s.circle(bb.x+bb.width, bb.y, 20).attr({class:'handler'});
+                    handleGroup = s.group(this, handle[0], handle[1]);
+                    handleGroup.drag(move,start,stop);
+                    handleGroup.click(clickFunc);
+                } else {
+                    dragging = 0;
+                    s.append(this);
+                    handleGroup.selectAll('handler').remove();
+                    handleGroup.remove();
+                }
+            }
+            var clickFunc = function(evt) {
+                var svg = document.getElementsByTagName("svg")[0];
+                svg = document.querySelector('svg');
+                var pt = svg.createSVGPoint();
+                pt.x = evt.clientX; 
+                pt.y = evt.clientY;
+                var cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+                console.log(cursorpt);
+            }
+            var start = function() {
+                this.data('origTransform', this.transform().local);
+            }
+            var move = function(dx, dy, x, y) {
+                var svg = document.getElementsByTagName("svg")[0];
+                svg = document.querySelector('svg');
+                var cursorpt = svg.createSVGPoint();
+                var scale = 1 + dx /400;
+                this.attr({
+                    transform: this.data('origTransform') + (this.data('origTransform') ? "S" : "s") + scale
+                });
+            }
+            var stop = function() {
+                var currentBox = {
+                    x: this.getBBox().x,
+                    y: this.getBBox().y,
+                    h: this.getBBox().h,
+                    w: this.getBBox().w
+                };
+                console.log(this.getBBox().x);
+                console.log(this.getBBox().y);
+                console.log(this.getBBox().w);
+                console.log(this.getBBox().h);
+            };
+            rect.dblclick(addHandleFunc);
+            
+        });
+        
+        
+    </script>
+</head>
+<body>
+        <svg version="1.1" id="something" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="800px" height="800px" viewBox="0 0 3300 4200" enable-background="new 0 0 3300 4200" xml:space="preserve">
+            <image height="4200" width="3300" xlink:href="lib/pg_0002.jpg"></image>
+        </svg>
+</body>
+</html>
