@@ -1,13 +1,14 @@
 import sys
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
+import subprocess
 
 # Function that converts a page from pdf to jpg
 def convert_page(filename):
     #print("converting to jpg file " + ff + "...", end = "\r")
-    os.system("convert -density 300 " + filename + " " + filename[:-4] + ".jpg")
+    subprocess.call(["convert", "-density", "300", filename, filename[:-4] + ".jpg"])
     # remove the pdf as we don't need it anymore
-    os.system("rm " + filename)
+    subprocess.call(["rm", filename])
     return 0
 
 # Main function of this file
