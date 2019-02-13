@@ -7,14 +7,15 @@ import numpy as np
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from pathlib import Path
 import cv2
+import subprocess
 
 
 # Function that converts a page from pdf to jpg
 def convert_page(ff):
     #print("converting to jpg file " + ff + "...", end = "\r")
-    os.system("convert -density 300 " + ff + " " + ff[:-4] + ".jpg")
+    subprocess.call(["convert", "-density", "300", ff, ff[:-4] + ".jpg"])
     # remove the pdf as we don't need it anymore
-    os.system("rm " + ff)
+    subprocess.call(["rm", ff])
     return 0
 
 # Main function of this file
