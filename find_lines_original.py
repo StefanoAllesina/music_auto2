@@ -36,11 +36,13 @@ def find_staves(jpg_path, jpg_page_num, box_data, box_id):
     image, contours, hier = cv2.findContours(horizontal, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours.reverse()
     line_number = 0
-
     for i, c in enumerate(contours):
         x, y, w, h = cv2.boundingRect(c)
         my_area = w * h
         if (my_area < max_area) and (my_area > min_area) and (h > min_height):
+            vert_buffer = h * 0.35
+            h += vert_buffer*2
+            y -= vert_buffer if y>=vert_buffer else 0
             # boxID page line x y w h
             line_number += 1
             data = {"boxID": box_id, "page": jpg_page_num, "line": line_number, "x" : x, "y": y, "w": w, "h": h}
