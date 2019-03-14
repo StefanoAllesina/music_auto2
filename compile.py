@@ -146,7 +146,6 @@ def compile_flow(path_to_csv, path_to_jpgs, output_path_to_final_pdf, number_lin
 
     string_of_all_jpg_paths = string_of_all_jpg_paths + output_path_to_final_pdf + "final0.jpg "
     firstPage = cv2.resize(firstPage,None,fx=0.5,fy=0.5, interpolation=cv2.INTER_AREA)
-    (thresh, firstPage) = cv2.threshold(firstPage,150,255,cv2.THRESH_BINARY)
     cv2.imwrite(output_path_to_final_pdf + "final0.jpg", firstPage)
 
 
@@ -189,7 +188,6 @@ def compile_flow(path_to_csv, path_to_jpgs, output_path_to_final_pdf, number_lin
 
         string_of_all_jpg_paths = string_of_all_jpg_paths + output_path_to_final_pdf + "final" + str(pdf_page_num) +".jpg "
         page_image = cv2.resize(page_image,None,fx=0.5,fy=0.5, interpolation=cv2.INTER_AREA)
-        (thresh, page_image) = cv2.threshold(page_image,150,255,cv2.THRESH_BINARY)
         cv2.imwrite(output_path_to_final_pdf + "final"+str(pdf_page_num)+".jpg", page_image)
 
         pdf_page_num += 1
