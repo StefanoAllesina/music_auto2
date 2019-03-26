@@ -92,8 +92,8 @@ app.post('/edit/:project/compile', function(req, res) {
                             repeatArray.push(boxes[j]);
                             j++;
                         }
-                        repeatArray.push(boxes[j]);
-                        boxes.splice(j + 1, 0, ...repeatArray);
+                        //repeatArray.push(boxes[j]);
+                        boxes.splice(j, 0, ...repeatArray);
                         break;
                     }
                 }
@@ -119,7 +119,7 @@ app.post('/edit/:project/compile', function(req, res) {
                                     if (!fs.existsSync(path.join(__dirname, 'finished'))) {
                                         fs.mkdirSync(path.join(__dirname, 'finished'));
                                     }
-                                    fs.copyFileSync(path.join(__dirname, 'temp', uniqueFolder, 'pdf_out.pdf'), path.join(__dirname, 'finished', project + '.pdf'), function(err) {
+                                    fs.copyFile(path.join(__dirname, 'temp', uniqueFolder, 'pdf_out.pdf'), path.join(__dirname, 'finished', project + '.pdf'), function(err) {
                                         if(err) {
                                             console.log(err);
                                         } else {
@@ -127,10 +127,9 @@ app.post('/edit/:project/compile', function(req, res) {
                                             fs.unlinkSync(path.join(__dirname, 'temp', uniqueFolder, 'pdf_out.pdf'));
                                             fs.rmdirSync(path.join(__dirname, 'temp', uniqueFolder));
                                             res.send('/finished/' + project + '.pdf');
+                                            console.log('Finished file copy and cleanup!');
                                         }
-                                        
                                     });
-                                    console.log('Finished file copy and cleanup!');
                                 }
                             });
                         }
@@ -227,6 +226,7 @@ app.post('/upload', upload.single('file'), function(req,res, next) {
         });
     } else {
         //folder already exists
+        res.redirect('/edit/' + foldername);
     }
     
 });

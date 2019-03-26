@@ -37,7 +37,7 @@ function Box(index, boxID, pageNum, lineNum, x, y, w, h) {
         self.repeatFront = self.svg.image('/static/symbols/frontRepeat.svg', self.x, self.y, self.h, self.h);
     }
     this.showRepeatEnd = function() {
-        var xPos = Number(self.x) + Number(self.w) - Number(self.h);
+        var xPos = Number(self.x) - Number(self.h); // + Number(self.w)
         self.repeatEnd = self.svg.image('/static/symbols/endRepeat.svg', xPos, self.y, self.h, self.h);
     }
 

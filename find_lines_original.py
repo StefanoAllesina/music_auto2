@@ -40,8 +40,8 @@ def find_staves(jpg_path, jpg_page_num, box_data, box_id):
         x, y, w, h = cv2.boundingRect(c)
         my_area = w * h
         if (my_area < max_area) and (my_area > min_area) and (h > min_height):
-            vert_buffer = h * 0.35
-            h += vert_buffer*2
+            vert_buffer = round(h * 0.35, 2)
+            h = round(h + vert_buffer*2, 2)
             y -= vert_buffer if y>=vert_buffer else 0
             # boxID page line x y w h
             line_number += 1
