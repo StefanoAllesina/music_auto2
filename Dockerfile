@@ -26,5 +26,5 @@ RUN pip install -r python-reqs.txt
 # bundle app source
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8080
 CMD ["node", "index.js", "test/"]
