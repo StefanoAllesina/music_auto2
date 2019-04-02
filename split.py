@@ -13,7 +13,7 @@ import subprocess
 # Function that converts a page from pdf to jpg
 def convert_page(ff):
     #print("converting to jpg file " + ff + "...", end = "\r")
-    subprocess.call(["convert", "-density", "300", ff, ff[:-4] + ".jpg"])
+    subprocess.check_call(["convert", "-debug", "Exception", "-density", "300", ff, ff[:-4] + ".jpg"])
     # remove the pdf as we don't need it anymore
     subprocess.call(["rm", ff])
     return 0
@@ -23,7 +23,7 @@ def convert_page(ff):
 #replaced filename with path_to_pdf
 
 def split_and_convert(path_to_pdf, output_folder, debug = False):
-    reader = PdfFileReader(stream=os.path.abspath(path_to_pdf))
+    reader = PdfFileReader(os.path.abspath(path_to_pdf))
     for i in range(0, reader.numPages):
         page = reader.pages[i]
         if debug:
@@ -32,7 +32,7 @@ def split_and_convert(path_to_pdf, output_folder, debug = False):
         writer.addPage(page)
         outputPath = os.path.abspath(output_folder)
         outputFile = outputPath + '/' + str(i) + '.pdf'
-        f = open(file=outputFile, mode='wb')
+        f = open(outputFile, 'wb')
         writer.write(f)
         f.close()
         convert_page(outputFile)
@@ -129,7 +129,7 @@ def mainFunction(path_to_pdf, output_folder):
     arg[0] = pdf that is multiple pages long
     arg[1] = folder that you want to place it in
     '''
-    numPages = split_and_convert(filename=path_to_pdf, outputfolder=output_folder, debug=True)
+    numPages = split_and_convert(path_to_pdf, output_folder, True)
     print("Finished splitting the file!")
     return numPages    
 

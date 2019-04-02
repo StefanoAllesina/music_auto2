@@ -33,7 +33,12 @@ def find_staves(jpg_path, jpg_page_num, box_data, box_id):
     horizontal = cv2.dilate(horizontal, kernel, iterations = 1)
     horizontal = cv2.bitwise_not(horizontal)
 
-    image, contours, hier = cv2.findContours(horizontal, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours = []
+    if int((cv2.__version__).split('.')[0]) == 3:
+        _, contours, _ = cv2.findContours(horizontal, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    else:
+        contours, _ = cv2.findContours(horizontal, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        
     contours.reverse()
     line_number = 0
     for i, c in enumerate(contours):

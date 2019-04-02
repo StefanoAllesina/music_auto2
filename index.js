@@ -142,7 +142,7 @@ app.post('/edit/:project/compile', function(req, res) {
 
 app.get('/projects', function(req, res) {
     fs.readdir(PROJECT_DIR, function (err, items) {
-        //Note: apple folders have a .DC_store in every folder
+        //Note: apple folders have a .DS_store in every folder
         var filteredItems = items.filter(function (item) {
             if (item !== 'original' && item !== '.DS_Store') {
                 return item;
