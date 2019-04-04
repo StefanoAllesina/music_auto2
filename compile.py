@@ -7,7 +7,7 @@ import glob
 import cv2
 import numpy as np
 import csv
-
+import subprocess
 
 #combines into one page. 
 #Note: we assume that the user is reading the second from the top line
@@ -107,7 +107,7 @@ def compile_flow(path_to_csv, path_to_jpgs, output_path_to_final_pdf, number_lin
 
     #how much vertical space is allocated for box + white space buffer in total
     verticalSpace = int(totalHeight * verticalSpaceBuffer + maxHeight)
-    leftSpace = int(leftSpaceBuffer * totalWidth)
+    leftSpace = int(leftSpaceBuffer * totalWidth * 0.5)
     tempImg = cv2.imread(path_to_jpgs + "0.jpg")
     channels = tempImg.shape[2]
 
@@ -145,6 +145,7 @@ def compile_flow(path_to_csv, path_to_jpgs, output_path_to_final_pdf, number_lin
     firstPage = combine_images_into_one_page(image_parameters, queue_of_line_images)
 
     string_of_all_jpg_paths = string_of_all_jpg_paths + output_path_to_final_pdf + "final0.jpg "
+    firstPage = cv2.resize(firstPage,None,fx=0.5,fy=0.5, interpolation=cv2.INTER_AREA)
     cv2.imwrite(output_path_to_final_pdf + "final0.jpg", firstPage)
 
 
@@ -186,6 +187,7 @@ def compile_flow(path_to_csv, path_to_jpgs, output_path_to_final_pdf, number_lin
         page_image = combine_images_into_one_page(image_parameters, queue_of_line_images)
 
         string_of_all_jpg_paths = string_of_all_jpg_paths + output_path_to_final_pdf + "final" + str(pdf_page_num) +".jpg "
+        page_image = cv2.resize(page_image,None,fx=0.5,fy=0.5, interpolation=cv2.INTER_AREA)
         cv2.imwrite(output_path_to_final_pdf + "final"+str(pdf_page_num)+".jpg", page_image)
 
         pdf_page_num += 1
@@ -203,9 +205,10 @@ def compile_flow(path_to_csv, path_to_jpgs, output_path_to_final_pdf, number_lin
 
 
 
-    print(string_of_all_jpg_paths)
+    #print(string_of_all_jpg_paths)
     #gets all the page images and makes them into one big happy pdf
-    os.system("convert " + string_of_all_jpg_paths + " " + output_path_to_final_pdf +"pdf_out.pdf")
+    #os.system("convert " + string_of_all_jpg_paths + " " + output_path_to_final_pdf +"pdf_out.pdf")
+    subprocess.check_call(['convert'] + string_of_all_jpg_paths.split() + [output_path_to_final_pdf+'pdf_out.pdf'])
     string_of_all_jpg_paths = string_of_all_jpg_paths.split()
 
     #deletes all those jpgs

@@ -1,0 +1,4 @@
+matplotlib
+PyPDF2
+pathlib
+opencv-contrib-python

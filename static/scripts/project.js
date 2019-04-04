@@ -121,7 +121,8 @@ function Project(svg, projectName, boxes, numPages) {
                 showAlert('<strong>Add Repeat</strong> You can\'t add closing repeat to the start of a line');
             } else if(clickIsAtEndOfBox(box,evt)) {
                 box.showRepeatEnd();
-                self.repeats[self.repeats.length-1].end = box.boxID;
+                //self.repeats[self.repeats.length-1].end = box.boxID;
+                self.repeats[self.repeats.length-1].end = self.repeats[self.repeats.length-1].start + 1;
                 dismissAlert();
                 self.projectFlowDisplay.update(self);
                 self.editMode = '';
@@ -129,7 +130,8 @@ function Project(svg, projectName, boxes, numPages) {
                 $("#toolbar").find(".nav-link").removeClass("disabled");                
             } else {
                 splitBox(this,evt);
-                self.repeats[self.repeats.length-1].end = box.boxID;
+                //self.repeats[self.repeats.length-1].end = box.boxID;
+                self.repeats[self.repeats.length-1].end = self.repeats[self.repeats.length-1].start + 1;
                 self.showPage(self.currentPage);
                 dismissAlert();
                 self.editMode = '';

@@ -13,7 +13,9 @@
                         console.log(data);
                         var html = '';
                         for(var i in data) {
+                            //if (data[i][data[i].length-4] != '.') {
                             html += `<a href="/edit/${data[i]}" class="list-group-item list-group-item-action">${data[i]}</a>`
+                            //}
                         }
                         document.getElementById("projects").innerHTML = html;
                     }

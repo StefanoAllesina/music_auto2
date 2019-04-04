@@ -92,8 +92,8 @@ app.post('/edit/:project/compile', function(req, res) {
                             repeatArray.push(boxes[j]);
                             j++;
                         }
-                        repeatArray.push(boxes[j]);
-                        boxes.splice(j + 1, 0, ...repeatArray);
+                        //repeatArray.push(boxes[j]);
+                        boxes.splice(j, 0, ...repeatArray);
                         break;
                     }
                 }
@@ -109,13 +109,16 @@ app.post('/edit/:project/compile', function(req, res) {
                         if(err) {
                             console.log(err);
                         } else {
-			    console.log('python compile.py ' + path.join(__dirname, 'temp', uniqueFolder, project+'.csv') + ' ' + path.join(PROJECT_DIR, project, 'pages/') + ' ' + path.join(__dirname, 'temp', uniqueFolder, '/') + ' 3')
+			    console.log('python compile.py ' + path.join(__dirname, 'temp', uniqueFolder, project+'.csv') + ' ' + path.join(PROJECT_DIR, project, 'pages/') + ' ' + path.join(__dirname, 'temp', uniqueFolder, '/') + ' 3');
                             child_process.exec('python compile.py ' + path.join(__dirname, 'temp', uniqueFolder, project+'.csv') + ' ' + path.join(PROJECT_DIR, project, 'pages/') + ' ' + path.join(__dirname, 'temp', uniqueFolder, '/') + ' 3', function(error, stdout) {
 		//	child_process.exec('pipenv run python compile.py ' + path.join(__dirname, 'temp', uniqueFolder, project+'.csv') + ' ' + path.join(PROJECT_DIR, project, 'pages/') + ' ' + path.join(__dirname, 'temp', uniqueFolder, '/') + ' 3', function(error, stdout) {
                                   if(error) {
                                       console.log(error);
                                   } else {
                                     console.log(stdout);
+                                    if (!fs.existsSync(path.join(__dirname, 'finished'))) {
+                                        fs.mkdirSync(path.join(__dirname, 'finished'));
+                                    }
                                     fs.copyFile(path.join(__dirname, 'temp', uniqueFolder, 'pdf_out.pdf'), path.join(__dirname, 'finished', project + '.pdf'), function(err) {
                                         if(err) {
                                             console.log(err);
@@ -124,8 +127,8 @@ app.post('/edit/:project/compile', function(req, res) {
                                             fs.unlinkSync(path.join(__dirname, 'temp', uniqueFolder, 'pdf_out.pdf'));
                                             fs.rmdirSync(path.join(__dirname, 'temp', uniqueFolder));
                                             res.send('/finished/' + project + '.pdf');
+                                            console.log('Finished file copy and cleanup!');
                                         }
-                                        
                                     });
                                 }
                             });
@@ -139,7 +142,7 @@ app.post('/edit/:project/compile', function(req, res) {
 
 app.get('/projects', function(req, res) {
     fs.readdir(PROJECT_DIR, function (err, items) {
-        //Note: apple folders have a .DC_store in every folder
+        //Note: apple folders have a .DS_store in every folder
         var filteredItems = items.filter(function (item) {
             if (item !== 'original' && item !== '.DS_Store') {
                 return item;
@@ -165,6 +168,8 @@ app.post('/upload', upload.single('file'), function(req,res, next) {
                     if (err) {
                         console.log(err);
                     } else {
+                        console.log(req.file.path);
+                        console.log(path.join(PROJECT_DIR, foldername, req.file.originalname));
                         fs.unlink(req.file.path, function(err) {
                             if(err) {
                                 console.log(err);
@@ -221,6 +226,7 @@ app.post('/upload', upload.single('file'), function(req,res, next) {
         });
     } else {
         //folder already exists
+        res.redirect('/edit/' + foldername);
     }
     
 });
@@ -490,6 +496,6 @@ app.post('/duplicate', (req, res) =>{
 });
 
  */
-app.listen(3000, function() {
-    console.log('app is listening on port 3000');
+app.listen(8080, function() {
+    console.log('app is listening on port 8080');
 });
