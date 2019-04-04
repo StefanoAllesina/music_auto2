@@ -1,7 +1,7 @@
 # Project specific directories
 #/finished/*
-#/temp/*
-#/test/*
+temp/*/
+test/*/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -20,6 +20,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!static/lib
 lib64/
 parts/
 sdist/
