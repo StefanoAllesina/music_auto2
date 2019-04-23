@@ -31,7 +31,7 @@ app.get('/edit/:project', function(req, res, next) {
             res.render('edit', {project:dirname});
         } else {
             console.log('file is on server, but needs to be user submitted');
-            res.render('index');
+            res.redirect('/');
         }
     } else {
         console.log('open temp directory specified');
