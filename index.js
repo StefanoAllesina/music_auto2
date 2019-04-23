@@ -21,8 +21,23 @@ app.get('/', function(req, res) {
 
 app.use('/finished', express.static(__dirname + '/finished/'));
 
-app.get('/edit/:project', function(req, res) {
-    res.render('edit', {project:req.params.project});
+app.get('/edit/:project', function(req, res, next) {
+    var filename = req.params.project;
+    if (filename[filename.length-4] == '.') {
+        var dirname = filename.slice(0,-4);
+        console.log(path.join(__dirname, 'test', dirname));
+        if (fs.existsSync(path.join(__dirname, 'test', dirname))) {
+            console.log('filename is a directory that already exists');
+            res.render('edit', {project:dirname});
+        } else {
+            console.log('file is on server, but needs to be user submitted');
+            res.render('index');
+        }
+    } else {
+        console.log('open temp directory specified');
+        res.render('edit', {project:filename});
+    }
+
 });
 
 app.delete('/:project', function(req, res) {
@@ -228,7 +243,6 @@ app.post('/upload', upload.single('file'), function(req,res, next) {
         //folder already exists
         res.redirect('/edit/' + foldername);
     }
-    
 });
 
 /********************************************************************/
